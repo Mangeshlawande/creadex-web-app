@@ -1,6 +1,6 @@
 # Dev Log
 
-## Day 1 — YYYY-MM-DD
+## Day 1 — 
 
 **Hours worked:** 4
 
@@ -31,36 +31,59 @@
 
 ---
 
-## Day 2 — YYYY-MM-DD
+## Day 2 — 
 
-_Fill in during Day 2_
+**Hours worked:** 4
+
+**What I did:**
+- Built `AuditForm` client component with tool selector, plan dropdowns, seat and spend inputs
+- Built `ToolCard` sub-component — handles per-tool field changes and auto-updates monthly spend from catalog price × seats
+- Wired form state through Zustand store → persists across page reloads via localStorage
+- Added `useHydrated` hook to prevent SSR/client mismatch on persisted Zustand state
+- Replaced audit page placeholder with working `<AuditForm />`
+- Added `audit-store.ts` in-memory store so results survive the redirect to `/results/[id]`
+- Added `GET /api/audit/[id]` route for fetching a single audit
+- Verified all 8 tool pricing URLs — updated dates in `PRICING_DATA.md`
+- Sent outreach to 3 people for user interviews (X DMs + 1 college network)
+
+**What I learned:**
+- Zustand `persist` hydrates asynchronously on the client — without `useHydrated`, Next.js server render gets default state, client render gets stored state, and React throws a hydration error. The fix is a `useEffect` that flips a boolean once mounted, then conditionally render the form only after hydration.
+- When the plan dropdown changes, auto-recalculating monthly spend from `pricePerSeat × seats` is a nice UX touch — but it means the user's manually entered spend gets overwritten. Solved by letting the recalculation happen on tool/plan/seat change, but showing a note if they manually edit the spend field to a different value.
+
+**Blockers / what I'm stuck on:**
+- The `nanoid` import from the audit engine works fine in the API route but `nanoid` v5 is ESM-only. If Jest can't resolve it, I'll need to add `transformIgnorePatterns` to jest config or mock it. Testing tomorrow.
+
+**Plan for tomorrow:**
+- Build full results page: `SavingsHero`, `ToolResultCard`, `AISummaryBlock`, `CredexCTA`, `LeadCaptureForm`, `ShareButton`
+- Build public shareable `/r/[id]` route with PII stripped and OG tags
+- Custom 404 page
+- Run full end-to-end: form → submit → results page renders
 
 ---
 
-## Day 3 — YYYY-MM-DD
+## Day 3 — 
 
-_Fill in during Day 3_
 
 ---
 
-## Day 4 — YYYY-MM-DD
+## Day 4 — 
 
 _Fill in during Day 4_
 
 ---
 
-## Day 5 — YYYY-MM-DD
+## Day 5 — 
 
 _Fill in during Day 5_
 
 ---
 
-## Day 6 — YYYY-MM-DD
+## Day 6 —
 
 _Fill in during Day 6_
 
 ---
 
-## Day 7 — YYYY-MM-DD
+## Day 7 — 
 
 _Fill in during Day 7_
