@@ -1,6 +1,6 @@
 # Dev Log
 
-## Day 1 — 
+## Day 1 —  
 
 **Hours worked:** 4
 
@@ -31,7 +31,7 @@
 
 ---
 
-## Day 2 — 
+## Day 2 —  
 
 **Hours worked:** 4
 
@@ -61,29 +61,57 @@
 
 ---
 
-## Day 3 — 
+## Day 3 —  
 
+**Hours worked:** 5
+
+**What I did:**
+- Built `SavingsHero` — big savings number with tier badge (high/medium/low/optimal), handles both savings and "you're spending well" states
+- Built `ToolResultCard` — per-tool breakdown with current → recommended arrow, savings in green, optimal tools dimmed
+- Built `AISummaryBlock` — shows Anthropic API summary or fallback templated summary (Day 4 will wire the API)
+- Built `CredexCTA` — prominent consultation CTA for >$500/mo savings, soft "stay updated" for lower tiers
+- Built `LeadCaptureForm` — email gate with honeypot spam protection, optional company/role fields, POST to `/api/leads`
+- Built `ShareButton` — copies `/r/[id]` to clipboard with "Link copied!" feedback
+- Replaced results page shell with full working page — all components wired, sorted by savings desc
+- Built `/r/[id]` public shareable route — same components, no lead capture form, no PII, viral CTA
+- Added `generateMetadata` to both results pages for correct OG/Twitter card tags
+- Added custom `not-found.tsx` for expired/missing audits
+- Wrote 5 additional tests: multi-tool savings sum, ChatGPT solo downgrade, coding team switch, Windsurf downgrade, unique nanoid per run
+
+**What I learned:**
+- Next.js `notFound()` in a server component triggers the nearest `not-found.tsx` — but it only works if the file is in the `app/` directory, not inside `[id]/`. Moved it to `src/app/not-found.tsx` for global coverage.
+- For the shareable URL, the instinct is to do a DB lookup server-side. But until Supabase is wired (Day 5), the in-memory store works for the same process. Noted the limitation clearly in the not-found page copy ("link may have expired").
+
+**Blockers / what I'm stuck on:**
+- The Anthropic API summary call is stubbed as `null` — `AISummaryBlock` falls back to the template summary correctly, but I want the real thing. Day 4.
+- Lead capture POST currently logs to console and returns `{ success: true }` — no actual storage yet. Day 5.
+
+**Plan for tomorrow:**
+- Wire Anthropic API for the AI summary paragraph (`src/lib/ai-summary.ts`)
+- Handle API failures gracefully — timeout, 429, network error all fall back to template
+- Test the full flow with real API key
+- Fill in `PROMPTS.md` with what I tried and what didn't work
 
 ---
 
-## Day 4 — 
+## Day 4 —  
 
 _Fill in during Day 4_
 
 ---
 
-## Day 5 — 
+## Day 5 —  
 
 _Fill in during Day 5_
 
 ---
 
-## Day 6 —
+## Day 6 —  
 
 _Fill in during Day 6_
 
 ---
 
-## Day 7 — 
+## Day 7 —  
 
 _Fill in during Day 7_
