@@ -80,18 +80,19 @@ describe("Audit Engine — Optimal detection", () => {
 // ─── Test 5: Savings tier thresholds ─────────────────────────────────────────
 describe("Audit Engine — Savings tiers", () => {
   test("sets savingsTier to 'high' when monthly savings >= 500", () => {
+    // Claude Max (20x) = $200/seat for a writing team of 4
+    // Engine recommends Pro at $20/seat → savings = ($200-$20) × 4 = $720/mo
     const formData: AuditFormData = {
-      teamSize: 3,
-      useCase: "coding",
+      teamSize: 4,
+      useCase: "writing",
       tools: [
-        // Cursor Business × 20 seats, team of 3 → big savings
-        { toolId: "cursor", planId: "cursor_business", seats: 20, monthlySpend: 800 },
+        { toolId: "claude", planId: "claude_max_20x", seats: 4, monthlySpend: 800 },
       ],
     };
     const result = runAudit(formData);
 
-    expect(result.savingsTier).toBe("high");
     expect(result.totalMonthlySavings).toBeGreaterThanOrEqual(500);
+    expect(result.savingsTier).toBe("high");
   });
 
   test("sets savingsTier to 'optimal' when no savings found", () => {
