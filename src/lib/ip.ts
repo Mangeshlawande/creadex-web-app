@@ -1,22 +1,12 @@
-import { TextEncoder } from "util";
-import { webcrypto } from "crypto";
-
-const cryptoAPI = globalThis.crypto ?? webcrypto;
+import { createHash } from "crypto";
 
 /**
  * Hashes an IP address using SHA-256 so we never store raw IPs.
- * Works in the Next.js Edge/Node runtime via the Web Crypto API.
  */
 export async function hashIP(ip: string): Promise<string> {
-  const encoder = new TextEncoder();
-
-  // Salt with a fixed string to prevent rainbow table attacks on IPs
-  const data = encoder.encode(`spendwise:${ip}`);
-
-  const hashBuffer = await cryptoAPI.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  return createHash("sha256")
+    .update(`spendwise:${ip}`)
+    .digest("hex");
 }
 
 /**
