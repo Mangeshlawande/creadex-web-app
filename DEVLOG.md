@@ -124,6 +124,33 @@
 
 ## Day 5 — YYYY-MM-DD
 
+**Hours worked:** 5
+
+**What I did:**
+- Created Supabase project, ran `supabase/schema.sql` migration — both tables created with RLS policies
+- Wired `saveAuditToDb` into `POST /api/audit` — audits now persist across server restarts
+- Updated `GET /api/audit/[id]` to query Supabase first, fall back to in-memory store
+- Completed `POST /api/leads` with: Zod email validation, IP hashing via Web Crypto API, rate limiting (3/hour per IP), `saveLeadToDb`, Resend confirmation email
+- Built `src/lib/email.ts` — plain-text confirmation email, different subject line for high-savings leads, fire-and-forget so email failure never breaks the lead capture response
+- Built `src/lib/ip.ts` — IP extraction from proxy headers (Vercel, Cloudflare), SHA-256 hashing so raw IPs are never stored
+- Tested the full end-to-end flow: form → API → Supabase row written → results page loads after `npm run dev` restart → email received in inbox
+- Wrote 7 new tests: fallback summary content, IP hashing determinism, hash uniqueness, unknown IP handling
+- Updated `TESTS.md` with new test file
+
+**What I learned:**
+- Supabase RLS (Row Level Security) blocks anon reads by default. The `audits` table needs a `SELECT` policy with `USING (true)` so the public `/r/[id]` shareable route can fetch audit data without auth. The `leads` table correctly uses `USING (false)` — only the service role (server-side) should ever read leads.
+- Resend's free tier requires sending from `onboarding@resend.dev` until you verify a domain. This is fine for the assignment — for production you'd add your domain in the Resend dashboard.
+- `crypto.subtle.digest` is available in Next.js API routes without any import — it's part of the Web Crypto API available in both Node 20 and the Edge runtime.
+
+**Blockers / what I'm stuck on:**
+- The shareable `/r/[id]` page currently uses `getAudit()` from the in-memory store since it's a server component. Now that Supabase is live, need to update it to call `getAuditFromDb()` — doing this tomorrow as part of Day 6 polish.
+
+**Plan for tomorrow:**
+- Fill in GTM.md, ECONOMICS.md, LANDING_COPY.md, METRICS.md (25 points of rubric — don't rush these)
+- Do the 3 user interviews or write up notes from conversations already had
+- UI polish pass: mobile responsiveness, Lighthouse score check
+- Update `/r/[id]` to read from Supabase
+
 ---
 
 ## Day 6 — YYYY-MM-DD

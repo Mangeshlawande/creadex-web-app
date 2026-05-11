@@ -43,6 +43,7 @@ export function LeadCaptureForm({ result }: LeadCaptureFormProps) {
           role: role.trim() || undefined,
           teamSize: result.formData.teamSize,
           auditId: result.id,
+          website: honeypot, // honeypot — empty for real users
         }),
       });
 
