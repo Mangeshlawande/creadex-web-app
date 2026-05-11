@@ -1,4 +1,7 @@
 import { TextEncoder } from "util";
+import { webcrypto } from "crypto";
+
+const cryptoAPI = globalThis.crypto ?? webcrypto;
 
 /**
  * Hashes an IP address using SHA-256 so we never store raw IPs.
@@ -10,7 +13,7 @@ export async function hashIP(ip: string): Promise<string> {
   // Salt with a fixed string to prevent rainbow table attacks on IPs
   const data = encoder.encode(`spendwise:${ip}`);
 
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashBuffer = await cryptoAPI.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
 
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
