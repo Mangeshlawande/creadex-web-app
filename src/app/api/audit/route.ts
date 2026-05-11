@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runAudit } from "@/lib/audit-engine";
 import { saveAudit } from "@/lib/audit-store";
+import { generateAISummary, buildFallbackSummary } from "@/lib/ai-summary";
+import { saveAuditToDb } from "@/lib/supabase";
 import type { AuditFormData, ApiResponse, AuditResult } from "@/types";
 
 export async function POST(req: NextRequest) {
@@ -22,19 +24,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Run deterministic audit engine
+    // 1. Run deterministic audit (no AI, fast)
     const auditResult = runAudit(body);
 
-    // TODO Day 4: Generate AI summary via Anthropic API
-    // TODO Day 5: Persist to Supabase (replace saveAudit below)
+    // 2. Generate AI summary — returns null on any failure, we fall back to template
+    const aiSummary = await generateAISummary(auditResult);
 
     const fullResult: AuditResult = {
       ...auditResult,
-      aiSummary: null,
+      aiSummary: aiSummary ?? buildFallbackSummary(auditResult),
     };
 
-    // Store in memory for now (Day 5 → Supabase)
-    saveAudit(fullResult);
+    // 3. Persist to Supabase (primary) with in-memory fallback
+    const saved = await saveAuditToDb(fullResult);
+    if (!saved) {
+      // Supabase failed — fall back to in-memory so the user still gets results
+      saveAudit(fullResult);
+    }
 
     return NextResponse.json<ApiResponse<AuditResult>>({ data: fullResult });
   } catch (err) {

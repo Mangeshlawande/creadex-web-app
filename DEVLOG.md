@@ -1,6 +1,6 @@
 # Dev Log
 
-## Day 1 —  
+## Day 1 — YYYY-MM-DD
 
 **Hours worked:** 4
 
@@ -31,7 +31,7 @@
 
 ---
 
-## Day 2 —  
+## Day 2 — YYYY-MM-DD
 
 **Hours worked:** 4
 
@@ -61,7 +61,7 @@
 
 ---
 
-## Day 3 —  
+## Day 3 — YYYY-MM-DD
 
 **Hours worked:** 5
 
@@ -94,24 +94,44 @@
 
 ---
 
-## Day 4 —  
+## Day 4 — YYYY-MM-DD
 
-_Fill in during Day 4_
+**Hours worked:** 3
+
+**What I did:**
+- Wired `generateAISummary()` into `POST /api/audit` — the full API call with 8-second timeout
+- Confirmed graceful fallback: disconnected API key intentionally, verified `AISummaryBlock` renders template summary without any error shown to user
+- Iterated on prompts 4 times — documented all attempts and what failed in `PROMPTS.md`
+- Final prompt split into two variants: one for savings-found audits, one for optimal audits
+- Verified word count trimming: model occasionally returns 110-120 words, trimmed to 115 max with ellipsis
+- Tested timeout handling: aborted fetch after 8s correctly returns null, fallback renders
+- Filled in `PROMPTS.md` completely with system prompt, user prompt, rationale, failed attempts, fallback template
+
+**What I learned:**
+- The `AbortController` + `setTimeout` pattern for fetch timeouts works cleanly in Next.js API routes. One gotcha: must call `clearTimeout()` after a successful response, otherwise the timeout fires anyway and logs a spurious "AbortError" even when the request succeeded.
+- Splitting the prompt by savings vs optimal tier produces noticeably better output than a single conditional prompt. The model's tone shifts appropriately — assertive for savings, affirming for optimal — without needing few-shot examples.
+
+**Blockers / what I'm stuck on:**
+- None today. Day 4 scope was tight and went smoothly.
+
+**Plan for tomorrow:**
+- Wire Supabase: `saveAuditToDb` and `getAuditFromDb` in the audit routes
+- Complete leads route: Zod validation + rate limiting + `saveLeadToDb` + Resend email
+- Write `supabase/schema.sql` migration
+- Test full flow: form → audit stored in DB → results page loads after server restart
 
 ---
 
-## Day 5 —  
-
-_Fill in during Day 5_
+## Day 5 — YYYY-MM-DD
 
 ---
 
-## Day 6 —  
+## Day 6 — YYYY-MM-DD
 
 _Fill in during Day 6_
 
 ---
 
-## Day 7 —  
+## Day 7 — YYYY-MM-DD
 
 _Fill in during Day 7_
