@@ -10,7 +10,12 @@ export type ToolId =
   | "gemini"
   | "windsurf";
 
-export type UseCase = "coding" | "writing" | "data" | "research" | "mixed";
+export type UseCase =
+  | "coding"
+  | "writing"
+  | "data"
+  | "research"
+  | "mixed";
 
 export interface PlanDefinition {
   id: string;
@@ -36,7 +41,9 @@ export interface ToolEntry {
   toolId: ToolId;
   planId: string;
   seats: number;
-  monthlySpend: number; // what they ACTUALLY pay (may differ from catalog due to discounts, etc.)
+
+  // what they ACTUALLY pay (may differ from catalog due to discounts)
+  monthlySpend: number;
 }
 
 export interface AuditFormData {
@@ -45,38 +52,103 @@ export interface AuditFormData {
   tools: ToolEntry[];
 }
 
-// ─── Audit Engine Types ───────────────────────────────────────────────────────
+// ─── Recommendation Types ─────────────────────────────────────────────────────
 
 export type RecommendationType =
-  | "downgrade_plan"      // same vendor, cheaper plan
-  | "reduce_seats"        // too many seats for team size
-  | "switch_tool"         // different vendor/tool
-  | "buy_via_credits"     // same tool but through Credex credits
-  | "optimal";            // already on the best plan
+  | "downgrade_plan"
+  | "reduce_seats"
+  | "switch_tool"
+  | "buy_via_credits"
+  | "optimal";
+
+// ─── Tool Audit Result ────────────────────────────────────────────────────────
 
 export interface ToolAuditResult {
   toolEntry: ToolEntry;
+
   toolName: string;
   planName: string;
+
   currentMonthlyCost: number;
+
   recommendationType: RecommendationType;
+
   recommendedPlanId?: string;
   recommendedToolId?: ToolId;
+
   recommendedMonthlyCost: number;
+
   monthlySavings: number;
   annualSavings: number;
-  reasoning: string; // one sentence, finance-grade logic
+
+  // finance-grade reasoning
+  reasoning: string;
 }
 
+// ─── Cross Tool Findings ──────────────────────────────────────────────────────
+
+export type CrossToolFindingType =
+  | "overlap_coding"
+  | "overlap_llm"
+  | "credex_api"
+  | "api_vs_subscription";
+
+export type CrossToolSeverity =
+  | "high"
+  | "medium"
+  | "low"
+  | "opportunity";
+
+export interface CrossToolFinding {
+  type: CrossToolFindingType;
+
+  severity: CrossToolSeverity;
+
+  // tools involved
+  toolNames: string[];
+
+  // UI content
+  title: string;
+  description: string;
+  action: string;
+
+  // savings
+  monthlySavings: number;
+  annualSavings: number;
+
+  // confidence score (0-100)
+  confidence: number;
+
+  // optional flags
+  isCredex?: boolean;
+}
+
+// ─── Final Audit Result ───────────────────────────────────────────────────────
+
 export interface AuditResult {
-  id: string; // nanoid for shareable URL
+  id: string;
+
   createdAt: string;
-  formData: AuditFormData; // stored without PII for shareable version
+
+  // stored without PII for shareable reports
+  formData: AuditFormData;
+
+  // per-tool recommendations
   toolResults: ToolAuditResult[];
+
+  // stack-level findings
+  crossToolFindings: CrossToolFinding[];
+
   totalMonthlySavings: number;
   totalAnnualSavings: number;
-  aiSummary: string | null; // from Anthropic API, nullable if fails
-  savingsTier: "high" | "medium" | "low" | "optimal"; // drives CTA logic
+
+  // nullable if AI generation fails
+  aiSummary: string | null;
+
+  savingsTier: "high" | "medium" | "low" | "optimal";
+
+  // 0-100 efficiency score
+  efficiencyScore: number;
 }
 
 // ─── Lead Capture Types ───────────────────────────────────────────────────────
