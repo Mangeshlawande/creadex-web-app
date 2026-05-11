@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { getAuditFromDb } from "@/lib/supabase";
 import { getAudit } from "@/lib/audit-store";
 import { formatCurrency } from "@/lib/utils";
 import { SavingsHero } from "@/components/audit/SavingsHero";
@@ -12,8 +13,17 @@ interface Props {
   params: { id: string };
 }
 
+async function loadAudit(id: string) {
+  // 1. Try Supabase first (persists across server restarts)
+  const dbAudit = await getAuditFromDb(id);
+  if (dbAudit) return dbAudit;
+
+  // 2. Fall back to in-memory store (same process, dev convenience)
+  return getAudit(id) ?? null;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const audit = getAudit(params.id);
+  const audit = await loadAudit(params.id);
   if (!audit) return { title: "Audit not found — SpendWise" };
 
   const title =
@@ -37,9 +47,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /**
  * Public shareable version — shows tools + savings, strips all PII.
  * Email, company name, role never appear here.
+ * Reads from Supabase so share links survive server restarts.
  */
-export default function PublicResultsPage({ params }: Props) {
-  const audit = getAudit(params.id);
+export default async function PublicResultsPage({ params }: Props) {
+  const audit = await loadAudit(params.id);
   if (!audit) notFound();
 
   return (
