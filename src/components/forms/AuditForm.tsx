@@ -26,8 +26,6 @@ export function AuditForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Wait for Zustand to hydrate from localStorage before rendering
-  // Prevents server/client mismatch on persisted state
   if (!hydrated) {
     return (
       <div className="space-y-4 animate-pulse">
@@ -72,15 +70,11 @@ export function AuditForm() {
         return;
       }
 
-      // Store result in sessionStorage so results page can read it
-      // even after a hot reload wipes the server-side in-memory store.
-      // Day 5: Supabase replaces this entirely.
       sessionStorage.setItem(
         `audit_${json.data!.id}`,
         JSON.stringify(json.data)
       );
 
-      // Navigate to results page
       router.push(`/results/${json.data!.id}`);
     } catch {
       setError("Network error — please check your connection and try again.");
@@ -102,7 +96,6 @@ export function AuditForm() {
           01 — Your Team
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Team size */}
           <div>
             <label
               htmlFor="teamSize"
@@ -111,20 +104,21 @@ export function AuditForm() {
               Team size
               <span className="text-slate-500 font-normal ml-1">(people using AI tools)</span>
             </label>
+            {/* text-base prevents iOS auto-zoom on focus; inputMode triggers numeric keyboard */}
             <input
               id="teamSize"
               type="number"
               min={1}
               max={10000}
+              inputMode="numeric"
               value={formData.teamSize}
               onChange={(e) =>
                 setTeamSize(Math.max(1, parseInt(e.target.value) || 1))
               }
-              className="w-full bg-surface-card border border-surface-border text-white rounded-xl px-4 py-3 text-sm focus:border-brand-500 focus:outline-none transition-colors"
+              className="w-full bg-surface-card border border-surface-border text-white rounded-xl px-4 py-3 text-base focus:border-brand-500 focus:outline-none transition-colors"
             />
           </div>
 
-          {/* Primary use case */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
               Primary use case
@@ -132,7 +126,7 @@ export function AuditForm() {
             <select
               value={formData.useCase}
               onChange={(e) => setUseCase(e.target.value as UseCase)}
-              className="w-full bg-surface-card border border-surface-border text-white rounded-xl px-4 py-3 text-sm focus:border-brand-500 focus:outline-none transition-colors"
+              className="w-full bg-surface-card border border-surface-border text-white rounded-xl px-4 py-3 text-base focus:border-brand-500 focus:outline-none transition-colors"
             >
               {USE_CASES.map((uc) => (
                 <option key={uc.value} value={uc.value}>
@@ -159,7 +153,7 @@ export function AuditForm() {
 
         {formData.tools.length === 0 ? (
           <div
-            className="card border-dashed border-surface-border p-10 text-center cursor-pointer hover:border-brand-500/40 transition-colors"
+            className="card border-dashed border-surface-border p-8 sm:p-10 text-center cursor-pointer hover:border-brand-500/40 transition-colors"
             onClick={handleAddTool}
             role="button"
             tabIndex={0}
@@ -186,10 +180,11 @@ export function AuditForm() {
         )}
 
         {formData.tools.length > 0 && (
+          /* min-h-[44px] meets WCAG 2.5.5 tap target size for mobile */
           <button
             type="button"
             onClick={handleAddTool}
-            className="mt-3 w-full card border-dashed py-3 text-sm text-slate-400 hover:text-brand-400 hover:border-brand-500/30 transition-all"
+            className="mt-3 w-full card border-dashed py-3 text-sm text-slate-400 hover:text-brand-400 hover:border-brand-500/30 transition-all min-h-[44px]"
           >
             + Add another tool
           </button>
@@ -198,39 +193,38 @@ export function AuditForm() {
 
       {/* Spend summary bar */}
       {formData.tools.length > 0 && (
-        <div className="card p-4 flex items-center justify-between bg-surface-card/50">
-          <div>
+        <div className="card p-4 flex items-center justify-between gap-4 bg-surface-card/50">
+          <div className="min-w-0">
             <p className="text-xs text-slate-500 uppercase tracking-wide">
               Total monthly spend entered
             </p>
-            <p className="text-2xl font-display text-white mt-0.5">
+            <p className="text-xl sm:text-2xl font-display text-white mt-0.5 truncate">
               ${totalMonthlySpend.toLocaleString()}
               <span className="text-sm text-slate-400 font-body ml-1">/mo</span>
             </p>
           </div>
-          <div className="text-right">
+          <div className="text-right flex-shrink-0">
             <p className="text-xs text-slate-500 uppercase tracking-wide">Annual</p>
-            <p className="text-lg text-slate-300 mt-0.5">
+            <p className="text-base sm:text-lg text-slate-300 mt-0.5">
               ${(totalMonthlySpend * 12).toLocaleString()}/yr
             </p>
           </div>
         </div>
       )}
 
-      {/* Error */}
       {error && (
         <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-xl">
           {error}
         </div>
       )}
 
-      {/* Submit */}
+      {/* Submit — min-h-[52px] for reliable thumb tap on mobile */}
       <button
         type="button"
         onClick={handleSubmit}
         disabled={isSubmitting || formData.tools.length === 0}
         className={cn(
-          "w-full py-4 rounded-xl font-semibold text-base transition-all",
+          "w-full py-4 rounded-xl font-semibold text-base transition-all min-h-[52px]",
           "bg-brand-500 text-white shadow-lg shadow-brand-500/20",
           "hover:bg-brand-600 hover:scale-[1.01] active:scale-100",
           "disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
