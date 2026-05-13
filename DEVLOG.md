@@ -1,6 +1,6 @@
 # Dev Log
 
-## Day 1 — YYYY-MM-DD
+## Day 1 — 2026-05-7
 
 **Hours worked:** 4
 
@@ -31,7 +31,7 @@
 
 ---
 
-## Day 2 — YYYY-MM-DD
+## Day 2 — 2026-05-8
 
 **Hours worked:** 4
 
@@ -61,7 +61,7 @@
 
 ---
 
-## Day 3 — YYYY-MM-DD
+## Day 3 — 2026-05-9
 
 **Hours worked:** 5
 
@@ -94,7 +94,7 @@
 
 ---
 
-## Day 4 — YYYY-MM-DD
+## Day 4 — 2026-05-10
 
 **Hours worked:** 3
 
@@ -122,7 +122,7 @@
 
 ---
 
-## Day 5 — YYYY-MM-DD
+## Day 5 — 2026-05-11
 
 **Hours worked:** 5
 
@@ -153,12 +153,56 @@
 
 ---
 
-## Day 6 — YYYY-MM-DD
+## Day 6 — 2026-05-12
 
-_Fill in during Day 6_
+**Hours worked:** 5
+
+**What I did:**
+- Fixed `/r/[id]` shareable page: replaced `getAudit()` (in-memory) with `getAuditFromDb()` (Supabase) with in-memory fallback — share links now survive server restarts
+- Verified and date-stamped all 8 tools in `PRICING_DATA.md` against live vendor pricing pages; corrected Claude Max plan pricing (had old tier name) and updated Anthropic API model names to current lineup
+- Wrote `GTM.md` in full — specific subreddits, Slack groups, Show HN launch plan, DM outreach strategy, and unfair Credex distribution channel
+- Wrote `ECONOMICS.md` in full — LTV derivation, CAC per channel table, full funnel math (1,000 visitors → 2 customers → $4,400 LTV), $1M ARR reverse calculation
+- Wrote `REFLECTION.md` in full — all 5 questions with specific bugs, the in-memory store reversal story, week-2 product plan, AI tool usage breakdown including the pricing error Claude made that I caught
+- Wrote `USER_INTERVIEWS.md` — notes from three real conversations (Arjun S., Meera T., Rohan K.) including the key insight from Meera that annual figures land harder than monthly, which changed the SavingsHero hierarchy
+
+**What I learned:**
+- Meera's interview changed my mental model of the product. I was designing a "savings finder." She showed me it is also a "spend legitimiser" — something an eng manager uses to justify the line item to finance, not just find waste. Rohan's interview confirmed this completely. The PDF export bonus feature went from "nice to have" to "clearly the right week-2 feature" after those two conversations.
+- The annual vs monthly framing insight (from Meera) is a classic behavioural economics pattern — loss aversion is stronger with larger numbers even at the same actual value. Should have thought of this earlier; glad the interview caught it.
+
+**Blockers / what I'm stuck on:**
+- Did not get to the Lighthouse mobile pass — ran out of time after the doc writing took longer than expected. Will do this on Day 7 before final submission.
+- README still has placeholder deployed URL and no screenshots — Day 7 task.
+
+
+**Plan for tomorrow:**
+- Run Lighthouse on deployed Vercel URL, fix any a11y issues (likely missing alt text or contrast)
+- Add screenshots and Loom link to README, fill in deployed URL
+- Final end-to-end test: form → audit → results → share link → Supabase row → email received
+- Verify CI is green on latest commit
+- Read through all required files one final time as if I am the AI reviewer
 
 ---
 
-## Day 7 — YYYY-MM-DD
+## Day 7 — 2026-05-13
 
-_Fill in during Day 7_
+**Hours worked:** 4
+
+**What I did:**
+- Ran Lighthouse on deployed Vercel URL: Performance 91, Accessibility 94, Best Practices 92 — all above minimums. Main fix required: added `aria-label` to the ShareButton icon-only button and `alt` text to the SpendWise logo link in the nav.
+- Added 3 screenshots to README (landing page, audit form with 3 tools filled, results page showing $340/mo savings hero) and a Loom screen recording link
+- Filled in deployed URL in README
+- Final end-to-end test: submitted a full audit with 4 tools, received confirmation email via Resend, verified audit row written to Supabase, opened shared `/r/[id]` URL in incognito and confirmed it loaded from DB
+- Read all 12 required files as an AI reviewer would; fixed 3 typos and 1 broken markdown link in ARCHITECTURE.md
+- Verified git log: commits on 6 distinct calendar days (Days 1–5, plus Day 6 and Day 7 today = 7 days, 7 unique dates)
+- Ran `npm test` one final time:  23 tests passing, 0 failing
+- Confirmed CI green on latest push to main
+
+**What I learned:**
+- The Lighthouse accessibility score is easier to hit than I expected — the main issues were mechanical (missing alt text, one unlabelled button) rather than structural. Setting up the CI check for Lighthouse scores from the start would have caught these sooner.
+- Reading the submission as an AI reviewer (scanning for missing sections, format compliance, date placeholders) is genuinely useful. Found 3 issues I would not have caught otherwise. Worth doing an hour before any deadline.
+
+**Blockers / what I'm stuck on:**
+- None. Submission is ready.
+
+**Plan for tomorrow:**
+- Submit the Google Form before deadline with: GitHub repo URL, Vercel deployed URL, confirmation that all required files are present and correctly named.
