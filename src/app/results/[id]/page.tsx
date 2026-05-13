@@ -55,9 +55,9 @@ export default function ResultsPage() {
     return (
       <main className="min-h-screen">
         <nav className="flex items-center justify-between px-6 py-4 border-b border-surface-border max-w-3xl mx-auto">
-          <Link href="/" className="font-display text-xl text-brand-400">SpendWise</Link>
+          <Link href="/" aria-label="SpendWise — go to homepage" className="font-display text-xl text-brand-400">SpendWise</Link>
         </nav>
-        <div className="max-w-2xl mx-auto px-6 py-20 space-y-4 animate-pulse">
+        <div role="status" aria-label="Loading your audit results" className="max-w-2xl mx-auto px-6 py-20 space-y-4 animate-pulse">
           <div className="h-40 bg-surface-card rounded-2xl" />
           <div className="h-20 bg-surface-card rounded-2xl" />
           <div className="h-28 bg-surface-card rounded-2xl" />
