@@ -68,4 +68,4 @@ npm run type-check        # TypeScript only
 
 ## Live URL
 
-**https://spendwise.vercel.app**
+**https://creadex-web-app-git-main-mangeshlawandes-projects.vercel.app/**
