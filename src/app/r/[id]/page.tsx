@@ -13,17 +13,8 @@ interface Props {
   params: { id: string };
 }
 
-async function loadAudit(id: string) {
-  // 1. Try Supabase first (persists across server restarts)
-  const dbAudit = await getAuditFromDb(id);
-  if (dbAudit) return dbAudit;
-
-  // 2. Fall back to in-memory store (same process, dev convenience)
-  return getAudit(id) ?? null;
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const audit = await loadAudit(params.id);
+  const audit = (await getAuditFromDb(params.id)) ?? getAudit(params.id);
   if (!audit) return { title: "Audit not found — SpendWise" };
 
   const title =
@@ -47,16 +38,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /**
  * Public shareable version — shows tools + savings, strips all PII.
  * Email, company name, role never appear here.
- * Reads from Supabase so share links survive server restarts.
  */
 export default async function PublicResultsPage({ params }: Props) {
-  const audit = await loadAudit(params.id);
+  const audit = (await getAuditFromDb(params.id)) ?? getAudit(params.id);
   if (!audit) notFound();
 
   return (
     <main className="min-h-screen">
       <nav className="flex items-center justify-between px-6 py-4 border-b border-surface-border max-w-3xl mx-auto">
-        <Link href="/" className="font-display text-xl text-brand-400">
+        <Link href="/" aria-label="SpendWise — go to homepage" className="font-display text-xl text-brand-400">
           SpendWise
         </Link>
         <Link
