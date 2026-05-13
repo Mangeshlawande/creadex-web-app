@@ -100,47 +100,53 @@ export function LeadCaptureForm({ result }: LeadCaptureFormProps) {
 
       <div className="space-y-3">
         <div>
-          <label className="block text-xs text-slate-400 mb-1.5 font-medium uppercase tracking-wide">
+          <label htmlFor="lead-email" className="block text-xs text-slate-400 mb-1.5 font-medium uppercase tracking-wide">
             Email *
           </label>
           <input
+            id="lead-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
+            autoComplete="email"
             className="w-full bg-surface border border-surface-border text-white rounded-lg px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none transition-colors placeholder-slate-600"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-slate-400 mb-1.5 font-medium uppercase tracking-wide">
+            <label htmlFor="lead-company" className="block text-xs text-slate-400 mb-1.5 font-medium uppercase tracking-wide">
               Company
             </label>
             <input
+              id="lead-company"
               type="text"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               placeholder="Acme Inc."
+              autoComplete="organization"
               className="w-full bg-surface border border-surface-border text-white rounded-lg px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none transition-colors placeholder-slate-600"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-400 mb-1.5 font-medium uppercase tracking-wide">
+            <label htmlFor="lead-role" className="block text-xs text-slate-400 mb-1.5 font-medium uppercase tracking-wide">
               Role
             </label>
             <input
+              id="lead-role"
               type="text"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               placeholder="CTO, Founder…"
+              autoComplete="organization-title"
               className="w-full bg-surface border border-surface-border text-white rounded-lg px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none transition-colors placeholder-slate-600"
             />
           </div>
         </div>
 
         {error && (
-          <p className="text-red-400 text-xs">{error}</p>
+          <p role="alert" className="text-red-400 text-xs">{error}</p>
         )}
 
         <button
