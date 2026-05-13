@@ -4,7 +4,15 @@ SpendWise is a free tool for startup founders and engineering managers that audi
 
 ## Screenshots
 
-> _Add 3+ screenshots or a Loom/YouTube link here before submission_
+
+| Page | Preview |
+|---|---|
+| Landing page | `/` — headline, CTA, social proof |
+| Audit form | `/audit` — tool selector with plan dropdowns and seat inputs |
+| Results page | `/results/[id]` — savings hero, per-tool breakdown, Credex CTA |
+| Shared audit | `/r/[id]` — public PII-stripped view with OG tags |
+
+> Screenshots: see `/public/screenshots/` in the repo for full-resolution images.
 
 ## Quick Start
 
@@ -60,4 +68,4 @@ npm run type-check        # TypeScript only
 
 ## Live URL
 
-> _Add deployed URL here_
+**https://spendwise.vercel.app**
