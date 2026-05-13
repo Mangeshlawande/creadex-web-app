@@ -19,6 +19,7 @@ export function ShareButton({ auditId }: ShareButtonProps) {
   return (
     <button
       onClick={handleCopy}
+      aria-label={copied ? "Audit link copied to clipboard" : "Copy shareable audit link"}
       className="inline-flex items-center gap-2 border border-surface-border hover:border-slate-500 text-slate-400 hover:text-white px-4 py-2.5 rounded-xl text-sm transition-all"
     >
       {copied ? (
