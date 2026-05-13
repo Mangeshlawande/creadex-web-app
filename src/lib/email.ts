@@ -42,9 +42,9 @@ export async function sendAuditConfirmation(
 
   const credexSection = isHighSavings
     ? `\nBecause your audit shows ${formatCurrency(audit.totalMonthlySavings)}/mo in savings, a member of the Credex team will reach out shortly. Credex sources discounted AI infrastructure credits — same tools, 20–40% less — from companies that overforecast.\n\nIf you'd like to fast-track, book a 15-minute call: https://credex.rocks\n`
-    : `\nCredex sells discounted AI credits for Cursor, Claude, ChatGPT Enterprise, and more. If your stack changes, come back for a new audit: ${process.env.NEXT_PUBLIC_BASE_URL ?? "https://spendwise.vercel.app"}\n`;
+    : `\nCredex sells discounted AI credits for Cursor, Claude, ChatGPT Enterprise, and more. If your stack changes, come back for a new audit: ${process.env.NEXT_PUBLIC_BASE_URL ?? "https://creadex-web-app-git-main-mangeshlawandes-projects.vercel.app"}\n`;
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL ?? "https://spendwise.vercel.app"}/r/${audit.id}`;
+  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL ?? "https://creadex-web-app-git-main-mangeshlawandes-projects.vercel.app"}/r/${audit.id}`;
 
   const text = `SpendWise Audit Report
 ${"─".repeat(40)}
